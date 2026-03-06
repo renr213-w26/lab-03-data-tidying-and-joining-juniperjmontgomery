@@ -67,3 +67,14 @@ inflation %>%
 ```
 Answer: Argentina (rate = 48.4%), Turkiye (19.6%), and Brazil (8.3%) had overall higher levels of inflation rates compared to the US (4.7%). Argentina was 10.3x the US inflation rate in 2021, where Turkiye was 4.2x and Brazil was 1.8x the US inflation rate.
 
+#Question 3: In a single pipeline, calculate the ratio of the inflation in 2021 and inflation in 1993 for each country and store this information in a new column called inf_ratio, arrange the data frame in decreasing order of inf_ratio, and select the variables country and inf_ratio to display as the result of the pipeline. Do not save this new variable in inf_ratio, only calculate and display it so you can answer the following question based on the output of the pipeline. Which country’s inflation change is the largest over this time period? Did inflation increase of decrease between 1993 and 2021 in this country?
+
+```{r}
+inflation %>%
+  mutate(inf_ratio = `2021`/`1993`) %>%
+  arrange(desc(inf_ratio)) %>%
+  select(country, inf_ratio)
+```
+
+Answer: New Zealand had the largest inflation change, where 2021 inflation increased (since the ratio > 1) 3.05x that of 1993.
+
