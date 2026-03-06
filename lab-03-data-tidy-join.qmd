@@ -207,3 +207,22 @@ us_infl_divis <- us_infl_joined %>%
   filter(cpi_division_id %in% divisions_of_interest)
 ```
 
+#Question 10:
+
+```{r}
+ggplot(us_infl_divis, aes(x = year, y = annual_inflation, color = description, shape = description)) + 
+  geom_point(size=2.5) + 
+  geom_line(aes(group = description), size = 1) +
+  labs(title = "US Annual Inflation Rate by CPI Divisons (2011-2021)",
+       subtitle = "selected divisions of interest",
+    x = "Year",
+       y = "Annual Inflation Rate (%)",
+    color = "CPI Division",
+    shape = "CPI Division") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Dark2") +
+  theme(legend.position = "bottom",
+legend.direction = "vertical" )
+```
+
+Answer: Most divisions are relatively stable over time, but transport shows the greatest fluctuations, which is unsurprising given the US's politics in oil, and major global oil stock crashes and spikes. Housing and health show a steady increase (again unsurprising), and furnishing is relatively flat. I didn't think that food would fluctuate more than housing, but I guess this is attributed to supply issues, since the US imports a lot of stuff (I believe). 
