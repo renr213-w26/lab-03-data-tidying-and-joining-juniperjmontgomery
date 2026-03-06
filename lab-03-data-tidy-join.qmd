@@ -1,0 +1,70 @@
+---
+title: "lab-03-data-tidy-join"
+author: "Juniper Montgomery"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r}
+library(tidyverse)
+country_inflation <- read_csv("data/country-inflation.csv")
+```
+
+#Question 1: get to know the data
+
+a)  glimpse() at the country_inflation data frame and answer the following questions based on the output. How many rows does country_inflation have and what does each row represent? How many columns does country_inflation have and what does each column represent?
+
+```{r}
+glimpse(country_inflation)
+```
+
+Answer: There are 44 rows, each representing annual inflation rates from 1993-2021 in one country. There are 30 columns, each representing inflation rates in a specific year.
+
+b)  
+
+```{r}
+inflation <- read_csv("data/country-inflation.csv")
+
+inflation %>%
+  distinct(country) %>%
+  pull(country)
+
+inflation
+```
+
+#Question 2: Which countries had the top three highest inflation rates in 2021? Your output should be a data frame with two columns, country and 2021, with inflation rates in descending order, and three rows for the top three countries. Briefly comment on how the inflation rates for these countries compare to the inflation rate for United States in that year.
+
+```{r}
+inflation %>% 
+  arrange(desc(`2021`)) %>% 
+  head(3) %>% 
+  select(country, "2021")
+
+inflation %>%
+  filter(country == "United States") %>%
+  select(country, `2021`)
+```
+
+Answer: Argentina (rate = 48.4%), Turkiye (19.6%), and Brazil (8.3%) had overall higher levels of inflation rates compared to the US (4.7%). Argentina was 10.3x the US inflation rate in 2021, where Turkiye was 4.2x and Brazil was 1.8x the US inflation rate.
+
