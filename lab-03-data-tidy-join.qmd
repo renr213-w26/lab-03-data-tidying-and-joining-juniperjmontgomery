@@ -121,7 +121,7 @@ country_inf_long %>%
 
 #Question 6:
 
-a)  Create a vector called countries_of_interest which contains the names of up to five countries you want to visualize the inflation rates for over the years. In 1-2 sentences, state why you chose these countries.
+a) Create a vector called countries_of_interest which contains the names of up to five countries you want to visualize the inflation rates for over the years. In 1-2 sentences, state why you chose these countries.
 
 ```{r}
 countries_of_interest <- c("Canada", "United States", "Germany", "Japan", "Argentina")
@@ -129,7 +129,7 @@ countries_of_interest <- c("Canada", "United States", "Germany", "Japan", "Argen
 
 Answer: I chose these countries because they represent various developed countries with relatively stable inflation, and included Argentina because of its relatively higher inflation as a comparison of inflation rates over time.
 
-b.  In a single pipeline, filter your reshaped dataset to include only the countries_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() countries in the data frame you created.
+b) In a single pipeline, filter your reshaped dataset to include only the countries_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() countries in the data frame you created.
 
 ```{r}
 countries_inf_vis <- country_inf_long %>%
@@ -155,3 +155,38 @@ ggplot(countries_inf_vis, aes(x = year, y = annual_inflation, color = country, s
   theme_minimal() +
   scale_color_brewer(palette = "Set1")
 ```
+
+##Part 2
+
+```{r}
+us_inflation <- read_csv("data/us-inflation.csv")
+cpi_divisions <- read_csv("data/cpi-divisions.csv")
+```
+
+#Question 8: 
+a) How many columns and how many rows does the us_inflation dataset have? What are the variables in it? Add a brief (1-2 sentences) narrative summarizing this information.
+
+```{r}
+us_inflation
+```
+Answer: There are 4 columns and 132 rows, including the country (which seems redundant in this case, lol), CPI division ID (each CPI is numerically listed), year, and annual inflation rate.
+
+b. How many columns and how many rows does the cpi_divisions dataset have? What are the variables in it? Add a brief (1-2 sentences) narrative summarizing this information.
+
+```{r}
+cpi_divisions
+```
+Answer: There are 2 columns and 12 rows, including the CPI division ID number, and a description of that division.
+
+c) Create a new dataset by joining the us_inflation dataset with the cpi_division_id dataset.
+Determine which type of join is the most appropriate one and use that.
+Note that the two datasets don’t have a common variable. Review the help for the join functions to determine how to use the by argument when the names of the variables that the datasets should be joined by are different.
+Use a short but informative name for the joined dataset, and do not overwrite either of the datasets that go into creating it.
+Then, find the number of rows and columns of the resulting dataset and report the names of its columns. Add a brief (1-2 sentences) narrative summarizing this information.
+
+```{r}
+us_infl_joined <- us_inflation %>%
+  left_join(cpi_divisions, by = c("cpi_division_id" = "id"))
+```
+
+Answer: There are 132 row and 5 columns, named country, cpi_division_id (with the CPI ID #), year, annual_inflation, and description of the cpi division corresponding to the division #.
