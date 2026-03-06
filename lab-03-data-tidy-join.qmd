@@ -65,6 +65,5 @@ inflation %>%
   filter(country == "United States") %>%
   select(country, `2021`)
 ```
-
 Answer: Argentina (rate = 48.4%), Turkiye (19.6%), and Brazil (8.3%) had overall higher levels of inflation rates compared to the US (4.7%). Argentina was 10.3x the US inflation rate in 2021, where Turkiye was 4.2x and Brazil was 1.8x the US inflation rate.
 
