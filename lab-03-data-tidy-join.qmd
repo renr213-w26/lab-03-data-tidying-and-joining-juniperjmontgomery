@@ -190,3 +190,20 @@ us_infl_joined <- us_inflation %>%
 ```
 
 Answer: There are 132 row and 5 columns, named country, cpi_division_id (with the CPI ID #), year, annual_inflation, and description of the cpi division corresponding to the division #.
+
+#Question 9:
+a) Create a vector called divisions_of_interest which contains the descriptions or IDs of CPI divisions you want to visualize. Your divisions_of_interest should consist of no more than five divisions. If you’re using descriptions, make sure that the spelling of your divisions matches how they appear in the dataset. Then, in 1-2 sentences, state why you chose these divisions.
+
+```{r}
+divisions_of_interest <- c(1, 4, 5, 6, 7)
+```
+
+Answer: I chose these divisions because they seem like the ones that represent everyday spending that would be most impacted by inflation, which would help me understand how inflation affects different parts of daily life.
+
+b. In a single pipeline, filter your reshaped dataset to include only the divisions_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() divisions in the data frame you created.
+
+```{r}
+us_infl_divis <- us_infl_joined %>%
+  filter(cpi_division_id %in% divisions_of_interest)
+```
+
