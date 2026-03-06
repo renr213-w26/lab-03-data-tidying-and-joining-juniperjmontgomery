@@ -31,6 +31,8 @@ library(tidyverse)
 country_inflation <- read_csv("data/country-inflation.csv")
 ```
 
+##Part 1
+
 #Question 1: get to know the data
 
 a)  glimpse() at the country_inflation data frame and answer the following questions based on the output. How many rows does country_inflation have and what does each row represent? How many columns does country_inflation have and what does each column represent?
@@ -63,6 +65,7 @@ inflation %>%
   filter(country == "United States") %>%
   select(country, `2021`)
 ```
+
 Answer: Argentina (rate = 48.4%), Turkiye (19.6%), and Brazil (8.3%) had overall higher levels of inflation rates compared to the US (4.7%). Argentina was 10.3x the US inflation rate in 2021, where Turkiye was 4.2x and Brazil was 1.8x the US inflation rate.
 
 #Question 3: In a single pipeline, calculate the ratio of the inflation in 2021 and inflation in 1993 for each country and store this information in a new column called inf_ratio, arrange the data frame in decreasing order of inf_ratio, and select the variables country and inf_ratio to display as the result of the pipeline. Do not save this new variable in inf_ratio, only calculate and display it so you can answer the following question based on the output of the pipeline. Which country’s inflation change is the largest over this time period? Did inflation increase of decrease between 1993 and 2021 in this country?
@@ -74,7 +77,7 @@ inflation %>%
   select(country, inf_ratio)
 ```
 
-Answer: New Zealand had the largest inflation change, where 2021 inflation increased (since the ratio > 1) 3.05x that of 1993.
+Answer: New Zealand had the largest inflation change, where 2021 inflation increased (since the ratio \> 1) 3.05x that of 1993.
 
 #Question 4: Reshape (pivot) country_inflation such that each row represents a country/year combination, with columns country, year, and annual_inflation. Then, display the resulting data frame and state how many rows and columns it has.
 
@@ -90,21 +93,25 @@ Answer: There are 1276 rows and 3 columns.
 
 #Question 5: Use a separate, single pipeline to answer each of the following questions:
 
-a) What is the highest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
+a)  What is the highest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
+
 ```{r}
 country_inf_long %>%
   filter(annual_inflation == max(annual_inflation, na.rm = TRUE))
 ```
+
 Answer: The highest annual inflation rate is from Brazil in 1994, with annual inflation of 2075.888.
 
-b) What is the lowest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
+b)  What is the lowest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
+
 ```{r}
 country_inf_long %>%
   filter(annual_inflation == min(annual_inflation, na.rm = TRUE))
 ```
+
 Answer: The lowest annual inflation rate is from Ireland, 2009, with an inflation rate of -4.478.
 
-c) Putting (a) and (b) together: What are the highest and the lowest inflation rates observed between 1993 and 2021? The output of the pipeline should be a data frame with two rows and three columns.
+c)  Putting (a) and (b) together: What are the highest and the lowest inflation rates observed between 1993 and 2021? The output of the pipeline should be a data frame with two rows and three columns.
 
 ```{r}
 country_inf_long %>%
@@ -114,7 +121,7 @@ country_inf_long %>%
 
 #Question 6:
 
-a) Create a vector called countries_of_interest which contains the names of up to five countries you want to visualize the inflation rates for over the years. In 1-2 sentences, state why you chose these countries.
+a)  Create a vector called countries_of_interest which contains the names of up to five countries you want to visualize the inflation rates for over the years. In 1-2 sentences, state why you chose these countries.
 
 ```{r}
 countries_of_interest <- c("Canada", "United States", "Germany", "Japan", "Argentina")
@@ -122,7 +129,7 @@ countries_of_interest <- c("Canada", "United States", "Germany", "Japan", "Argen
 
 Answer: I chose these countries because they represent various developed countries with relatively stable inflation, and included Argentina because of its relatively higher inflation as a comparison of inflation rates over time.
 
-b. In a single pipeline, filter your reshaped dataset to include only the countries_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() countries in the data frame you created.
+b.  In a single pipeline, filter your reshaped dataset to include only the countries_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() countries in the data frame you created.
 
 ```{r}
 countries_inf_vis <- country_inf_long %>%
@@ -132,3 +139,19 @@ countries_inf_vis %>%
   distinct(country)
 ```
 
+#Question 7: Using your data frame from the previous question, create a plot of annual inflation vs. year for these countries. Then, in a few sentences, describe the patterns you observe in the plot, particularly focusing on anything you find surprising or not surprising, based on your knowledge (or lack thereof) of these countries economies.
+
+```{r}
+ggplot(countries_inf_vis, aes(x = year, y = annual_inflation, color = country, shape = country)) + 
+  geom_point(size = 2.5) +
+  geom_line(aes(group = country), size = 1) + 
+  labs(
+    title = "Annual Inflation Rates (1993-2021) for Selected Countries",
+    x = "Year",
+    y = "Annual Inflation Rate (%)",
+    color = "Country",
+    shape = "Country"
+  ) +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1")
+```
