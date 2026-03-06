@@ -88,4 +88,26 @@ country_inf_long <- inflation %>%
 
 Answer: There are 1276 rows and 3 columns.
 
-#
+#Question 5: Use a separate, single pipeline to answer each of the following questions:
+
+a) What is the highest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
+```{r}
+country_inf_long %>%
+  filter(annual_inflation == max(annual_inflation, na.rm = TRUE))
+```
+Answer: The highest annual inflation rate is from Brazil in 1994, with annual inflation of 2075.888.
+
+b) What is the lowest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
+```{r}
+country_inf_long %>%
+  filter(annual_inflation == min(annual_inflation, na.rm = TRUE))
+```
+Answer: The lowest annual inflation rate is from Ireland, 2009, with an inflation rate of -4.478.
+
+c) Putting (a) and (b) together: What are the highest and the lowest inflation rates observed between 1993 and 2021? The output of the pipeline should be a data frame with two rows and three columns.
+
+```{r}
+country_inf_long %>%
+  filter(annual_inflation == max(annual_inflation, na.rm = TRUE) |
+         annual_inflation == min(annual_inflation, na.rm = TRUE))
+```
