@@ -1,39 +1,18 @@
 ---
 title: "lab-03-data-tidy-join"
 author: "Juniper Montgomery"
-format: html
+format: pdf
 editor: visual
 ---
-
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
 
 ```{r}
 library(tidyverse)
 country_inflation <- read_csv("data/country-inflation.csv")
 ```
 
-##Part 1
+# Part 1
 
-#Question 1: get to know the data
+## Question 1: get to know the data
 
 a)  glimpse() at the country_inflation data frame and answer the following questions based on the output. How many rows does country_inflation have and what does each row represent? How many columns does country_inflation have and what does each column represent?
 
@@ -53,7 +32,7 @@ inflation %>%
   pull(country)
 ```
 
-#Question 2: Which countries had the top three highest inflation rates in 2021? Your output should be a data frame with two columns, country and 2021, with inflation rates in descending order, and three rows for the top three countries. Briefly comment on how the inflation rates for these countries compare to the inflation rate for United States in that year.
+## Question 2: Which countries had the top three highest inflation rates in 2021? Your output should be a data frame with two columns, country and 2021, with inflation rates in descending order, and three rows for the top three countries. Briefly comment on how the inflation rates for these countries compare to the inflation rate for United States in that year.
 
 ```{r}
 inflation %>% 
@@ -68,7 +47,7 @@ inflation %>%
 
 Answer: Argentina (rate = 48.4%), Turkiye (19.6%), and Brazil (8.3%) had overall higher levels of inflation rates compared to the US (4.7%). Argentina was 10.3x the US inflation rate in 2021, where Turkiye was 4.2x and Brazil was 1.8x the US inflation rate.
 
-#Question 3: In a single pipeline, calculate the ratio of the inflation in 2021 and inflation in 1993 for each country and store this information in a new column called inf_ratio, arrange the data frame in decreasing order of inf_ratio, and select the variables country and inf_ratio to display as the result of the pipeline. Do not save this new variable in inf_ratio, only calculate and display it so you can answer the following question based on the output of the pipeline. Which country’s inflation change is the largest over this time period? Did inflation increase of decrease between 1993 and 2021 in this country?
+## Question 3: In a single pipeline, calculate the ratio of the inflation in 2021 and inflation in 1993 for each country and store this information in a new column called inf_ratio, arrange the data frame in decreasing order of inf_ratio, and select the variables country and inf_ratio to display as the result of the pipeline. Do not save this new variable in inf_ratio, only calculate and display it so you can answer the following question based on the output of the pipeline. Which country’s inflation change is the largest over this time period? Did inflation increase of decrease between 1993 and 2021 in this country?
 
 ```{r}
 inflation %>%
@@ -79,7 +58,7 @@ inflation %>%
 
 Answer: New Zealand had the largest inflation change, where 2021 inflation increased (since the ratio \> 1) 3.05x that of 1993.
 
-#Question 4: Reshape (pivot) country_inflation such that each row represents a country/year combination, with columns country, year, and annual_inflation. Then, display the resulting data frame and state how many rows and columns it has.
+## Question 4: Reshape (pivot) country_inflation such that each row represents a country/year combination, with columns country, year, and annual_inflation. Then, display the resulting data frame and state how many rows and columns it has.
 
 ```{r}
 country_inf_long <- inflation %>%
@@ -91,7 +70,7 @@ country_inf_long <- inflation %>%
 
 Answer: There are 1276 rows and 3 columns.
 
-#Question 5: Use a separate, single pipeline to answer each of the following questions:
+## Question 5: Use a separate, single pipeline to answer each of the following questions:
 
 a)  What is the highest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
 
@@ -119,9 +98,9 @@ country_inf_long %>%
          annual_inflation == min(annual_inflation, na.rm = TRUE))
 ```
 
-#Question 6:
+## Question 6:
 
-a) Create a vector called countries_of_interest which contains the names of up to five countries you want to visualize the inflation rates for over the years. In 1-2 sentences, state why you chose these countries.
+a)  Create a vector called countries_of_interest which contains the names of up to five countries you want to visualize the inflation rates for over the years. In 1-2 sentences, state why you chose these countries.
 
 ```{r}
 countries_of_interest <- c("Canada", "United States", "Germany", "Japan", "Argentina")
@@ -129,7 +108,7 @@ countries_of_interest <- c("Canada", "United States", "Germany", "Japan", "Argen
 
 Answer: I chose these countries because they represent various developed countries with relatively stable inflation, and included Argentina because of its relatively higher inflation as a comparison of inflation rates over time.
 
-b) In a single pipeline, filter your reshaped dataset to include only the countries_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() countries in the data frame you created.
+b)  In a single pipeline, filter your reshaped dataset to include only the countries_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() countries in the data frame you created.
 
 ```{r}
 countries_inf_vis <- country_inf_long %>%
@@ -139,7 +118,7 @@ countries_inf_vis %>%
   distinct(country)
 ```
 
-#Question 7: Using your data frame from the previous question, create a plot of annual inflation vs. year for these countries. Then, in a few sentences, describe the patterns you observe in the plot, particularly focusing on anything you find surprising or not surprising, based on your knowledge (or lack thereof) of these countries economies.
+## Question 7: Using your data frame from the previous question, create a plot of annual inflation vs. year for these countries. Then, in a few sentences, describe the patterns you observe in the plot, particularly focusing on anything you find surprising or not surprising, based on your knowledge (or lack thereof) of these countries economies.
 
 ```{r}
 ggplot(countries_inf_vis, aes(x = year, y = annual_inflation, color = country, shape = country)) + 
@@ -156,33 +135,32 @@ ggplot(countries_inf_vis, aes(x = year, y = annual_inflation, color = country, s
   scale_color_brewer(palette = "Set1")
 ```
 
-##Part 2
+# Part 2
 
 ```{r}
 us_inflation <- read_csv("data/us-inflation.csv")
 cpi_divisions <- read_csv("data/cpi-divisions.csv")
 ```
 
-#Question 8: 
-a) How many columns and how many rows does the us_inflation dataset have? What are the variables in it? Add a brief (1-2 sentences) narrative summarizing this information.
+## Question 8:
+
+a)  How many columns and how many rows does the us_inflation dataset have? What are the variables in it? Add a brief (1-2 sentences) narrative summarizing this information.
 
 ```{r}
 us_inflation
 ```
+
 Answer: There are 4 columns and 132 rows, including the country (which seems redundant in this case, lol), CPI division ID (each CPI is numerically listed), year, and annual inflation rate.
 
-b. How many columns and how many rows does the cpi_divisions dataset have? What are the variables in it? Add a brief (1-2 sentences) narrative summarizing this information.
+b.  How many columns and how many rows does the cpi_divisions dataset have? What are the variables in it? Add a brief (1-2 sentences) narrative summarizing this information.
 
 ```{r}
 cpi_divisions
 ```
+
 Answer: There are 2 columns and 12 rows, including the CPI division ID number, and a description of that division.
 
-c) Create a new dataset by joining the us_inflation dataset with the cpi_division_id dataset.
-Determine which type of join is the most appropriate one and use that.
-Note that the two datasets don’t have a common variable. Review the help for the join functions to determine how to use the by argument when the names of the variables that the datasets should be joined by are different.
-Use a short but informative name for the joined dataset, and do not overwrite either of the datasets that go into creating it.
-Then, find the number of rows and columns of the resulting dataset and report the names of its columns. Add a brief (1-2 sentences) narrative summarizing this information.
+c)  Create a new dataset by joining the us_inflation dataset with the cpi_division_id dataset. Determine which type of join is the most appropriate one and use that. Note that the two datasets don’t have a common variable. Review the help for the join functions to determine how to use the by argument when the names of the variables that the datasets should be joined by are different. Use a short but informative name for the joined dataset, and do not overwrite either of the datasets that go into creating it. Then, find the number of rows and columns of the resulting dataset and report the names of its columns. Add a brief (1-2 sentences) narrative summarizing this information.
 
 ```{r}
 us_infl_joined <- us_inflation %>%
@@ -191,8 +169,9 @@ us_infl_joined <- us_inflation %>%
 
 Answer: There are 132 row and 5 columns, named country, cpi_division_id (with the CPI ID #), year, annual_inflation, and description of the cpi division corresponding to the division #.
 
-#Question 9:
-a) Create a vector called divisions_of_interest which contains the descriptions or IDs of CPI divisions you want to visualize. Your divisions_of_interest should consist of no more than five divisions. If you’re using descriptions, make sure that the spelling of your divisions matches how they appear in the dataset. Then, in 1-2 sentences, state why you chose these divisions.
+## Question 9:
+
+a)  Create a vector called divisions_of_interest which contains the descriptions or IDs of CPI divisions you want to visualize. Your divisions_of_interest should consist of no more than five divisions. If you’re using descriptions, make sure that the spelling of your divisions matches how they appear in the dataset. Then, in 1-2 sentences, state why you chose these divisions.
 
 ```{r}
 divisions_of_interest <- c(1, 4, 5, 6, 7)
@@ -200,14 +179,14 @@ divisions_of_interest <- c(1, 4, 5, 6, 7)
 
 Answer: I chose these divisions because they seem like the ones that represent everyday spending that would be most impacted by inflation, which would help me understand how inflation affects different parts of daily life.
 
-b. In a single pipeline, filter your reshaped dataset to include only the divisions_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() divisions in the data frame you created.
+b.  In a single pipeline, filter your reshaped dataset to include only the divisions_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() divisions in the data frame you created.
 
 ```{r}
 us_infl_divis <- us_infl_joined %>%
   filter(cpi_division_id %in% divisions_of_interest)
 ```
 
-#Question 10:
+## Question 10:
 
 ```{r}
 ggplot(us_infl_divis, aes(x = year, y = annual_inflation, color = description, shape = description)) + 
@@ -225,4 +204,4 @@ ggplot(us_infl_divis, aes(x = year, y = annual_inflation, color = description, s
 legend.direction = "vertical" )
 ```
 
-Answer: Most divisions are relatively stable over time, but transport shows the greatest fluctuations, which is unsurprising given the US's politics in oil, and major global oil stock crashes and spikes. Housing and health show a steady increase (again unsurprising), and furnishing is relatively flat. I didn't think that food would fluctuate more than housing, but I guess this is attributed to supply issues, since the US imports a lot of stuff (I believe). 
+Answer: Most divisions are relatively stable over time, but transport shows the greatest fluctuations, which is unsurprising given the US's politics in oil, and major global oil stock crashes and spikes. Housing and health show a steady increase (again unsurprising), and furnishing is relatively flat. I didn't think that food would fluctuate more than housing, but I guess this is attributed to supply issues, since the US imports a lot of stuff (I believe).
