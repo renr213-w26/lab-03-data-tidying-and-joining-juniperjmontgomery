@@ -111,3 +111,24 @@ country_inf_long %>%
   filter(annual_inflation == max(annual_inflation, na.rm = TRUE) |
          annual_inflation == min(annual_inflation, na.rm = TRUE))
 ```
+
+#Question 6:
+
+a) Create a vector called countries_of_interest which contains the names of up to five countries you want to visualize the inflation rates for over the years. In 1-2 sentences, state why you chose these countries.
+
+```{r}
+countries_of_interest <- c("Canada", "United States", "Germany", "Japan", "Argentina")
+```
+
+Answer: I chose these countries because they represent various developed countries with relatively stable inflation, and included Argentina because of its relatively higher inflation as a comparison of inflation rates over time.
+
+b. In a single pipeline, filter your reshaped dataset to include only the countries_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() countries in the data frame you created.
+
+```{r}
+countries_inf_vis <- country_inf_long %>%
+  filter(country %in% countries_of_interest)
+
+countries_inf_vis %>%
+  distinct(country)
+```
+
