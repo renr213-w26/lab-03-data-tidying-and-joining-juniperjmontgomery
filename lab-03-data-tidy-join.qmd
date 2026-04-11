@@ -1,13 +1,13 @@
 ---
-title: "lab-03-data-tidy-join"
+title: "Lab 03: Data Tidy and Join"
 author: "Juniper Montgomery"
-format: pdf
+format:  pdf
 editor: visual
 ---
 
 ```{r}
 library(tidyverse)
-country_inflation <- read_csv("data/country-inflation.csv")
+inflation <- read_csv("data/country-inflation.csv")
 ```
 
 # Part 1
@@ -17,18 +17,15 @@ country_inflation <- read_csv("data/country-inflation.csv")
 a)  glimpse() at the country_inflation data frame and answer the following questions based on the output. How many rows does country_inflation have and what does each row represent? How many columns does country_inflation have and what does each column represent?
 
 ```{r}
-glimpse(country_inflation)
+glimpse(inflation)
 ```
 
 Answer: There are 44 rows, each representing annual inflation rates from 1993-2021 in one country. There are 30 columns, each representing inflation rates in a specific year.
 
-b)  
+b)  Display a list of the countries included in the dataset.
 
 ```{r}
-inflation <- read_csv("data/country-inflation.csv")
-
 inflation %>%
-  distinct(country) %>%
   pull(country)
 ```
 
@@ -37,8 +34,8 @@ inflation %>%
 ```{r}
 inflation %>% 
   arrange(desc(`2021`)) %>% 
-  head(3) %>% 
-  select(country, "2021")
+  slice_head(n = 3) %>% 
+  select(country, `2021`)
 
 inflation %>%
   filter(country == "United States") %>%
@@ -56,12 +53,12 @@ inflation %>%
   select(country, inf_ratio)
 ```
 
-Answer: New Zealand had the largest inflation change, where 2021 inflation increased (since the ratio \> 1) 3.05x that of 1993.
+Answer: New Zealand had the largest inflation change, where 2021 inflation increased (since the ratio is greater than 1) 3.05x that of 1993.
 
 ## Question 4: Reshape (pivot) country_inflation such that each row represents a country/year combination, with columns country, year, and annual_inflation. Then, display the resulting data frame and state how many rows and columns it has.
 
 ```{r}
-country_inf_long <- inflation %>%
+inf_long <- inflation %>%
   pivot_longer(cols = -country,
                names_to = "year",
                values_to = "annual_inflation",
@@ -75,7 +72,7 @@ Answer: There are 1276 rows and 3 columns.
 a)  What is the highest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
 
 ```{r}
-country_inf_long %>%
+inf_long %>%
   filter(annual_inflation == max(annual_inflation, na.rm = TRUE))
 ```
 
@@ -84,7 +81,7 @@ Answer: The highest annual inflation rate is from Brazil in 1994, with annual in
 b)  What is the lowest inflation rate observed between 1993 and 2021? The output of the pipeline should be a data frame with one row and three columns. In addition to code and output, your response should include a single sentence stating the country and year.
 
 ```{r}
-country_inf_long %>%
+inf_long %>%
   filter(annual_inflation == min(annual_inflation, na.rm = TRUE))
 ```
 
@@ -92,8 +89,8 @@ Answer: The lowest annual inflation rate is from Ireland, 2009, with an inflatio
 
 c)  Putting (a) and (b) together: What are the highest and the lowest inflation rates observed between 1993 and 2021? The output of the pipeline should be a data frame with two rows and three columns.
 
-```{r}
-country_inf_long %>%
+```{r, tidy=TRUE}
+inf_long %>%
   filter(annual_inflation == max(annual_inflation, na.rm = TRUE) |
          annual_inflation == min(annual_inflation, na.rm = TRUE))
 ```
@@ -103,15 +100,15 @@ country_inf_long %>%
 a)  Create a vector called countries_of_interest which contains the names of up to five countries you want to visualize the inflation rates for over the years. In 1-2 sentences, state why you chose these countries.
 
 ```{r}
-countries_of_interest <- c("Canada", "United States", "Germany", "Japan", "Argentina")
+countries_of_interest <- c("Norway", "Denmark", "Finland", "Iceland", "Sweden")
 ```
 
-Answer: I chose these countries because they represent various developed countries with relatively stable inflation, and included Argentina because of its relatively higher inflation as a comparison of inflation rates over time.
+Answer: I arbitrarily thought it would be interesting to look at inflation rates across Nordic countries, although I know very little about these places.
 
 b)  In a single pipeline, filter your reshaped dataset to include only the countries_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() countries in the data frame you created.
 
 ```{r}
-countries_inf_vis <- country_inf_long %>%
+countries_inf_vis <- inf_long %>%
   filter(country %in% countries_of_interest)
 
 countries_inf_vis %>%
@@ -120,8 +117,9 @@ countries_inf_vis %>%
 
 ## Question 7: Using your data frame from the previous question, create a plot of annual inflation vs. year for these countries. Then, in a few sentences, describe the patterns you observe in the plot, particularly focusing on anything you find surprising or not surprising, based on your knowledge (or lack thereof) of these countries economies.
 
-```{r}
-ggplot(countries_inf_vis, aes(x = year, y = annual_inflation, color = country, shape = country)) + 
+```{r, warning=FALSE}
+ggplot(countries_inf_vis, aes(x = year, y = annual_inflation, 
+                    color = country, shape = country)) + 
   geom_point(size = 2.5) +
   geom_line(aes(group = country), size = 1) + 
   labs(
@@ -134,6 +132,8 @@ ggplot(countries_inf_vis, aes(x = year, y = annual_inflation, color = country, s
   theme_minimal() +
   scale_color_brewer(palette = "Set1")
 ```
+
+Answer: Unsurprisingly, the Nordic countries follow similar fluctuations in inflation rates, which tells me that they're influenced by similar factors. However, the degree to which they're influenced varies, where Iceland faces the biggest instabilities, and Sweden seems the most stable. This is surprising to me simply because I know nothing about these countries. 2008 had the largest increases, likely influenced by the US' financial crisis.
 
 # Part 2
 
@@ -152,7 +152,7 @@ us_inflation
 
 Answer: There are 4 columns and 132 rows, including the country (which seems redundant in this case, lol), CPI division ID (each CPI is numerically listed), year, and annual inflation rate.
 
-b.  How many columns and how many rows does the cpi_divisions dataset have? What are the variables in it? Add a brief (1-2 sentences) narrative summarizing this information.
+b)  How many columns and how many rows does the cpi_divisions dataset have? What are the variables in it? Add a brief (1-2 sentences) narrative summarizing this information.
 
 ```{r}
 cpi_divisions
@@ -179,7 +179,7 @@ divisions_of_interest <- c(1, 4, 5, 6, 7)
 
 Answer: I chose these divisions because they seem like the ones that represent everyday spending that would be most impacted by inflation, which would help me understand how inflation affects different parts of daily life.
 
-b.  In a single pipeline, filter your reshaped dataset to include only the divisions_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() divisions in the data frame you created.
+b)  In a single pipeline, filter your reshaped dataset to include only the divisions_of_interest from part (a), and save the resulting data frame with a new name so you (1) can refer to this data frame later in your analysis and (2) do not overwrite the data frame you’re starting with. Use a short but informative name. Then, in a new pipeline, find the distinct() divisions in the data frame you created.
 
 ```{r}
 us_infl_divis <- us_infl_joined %>%
@@ -189,7 +189,8 @@ us_infl_divis <- us_infl_joined %>%
 ## Question 10:
 
 ```{r}
-ggplot(us_infl_divis, aes(x = year, y = annual_inflation, color = description, shape = description)) + 
+ggplot(us_infl_divis, aes(x = year, y = annual_inflation, 
+        color = description, shape = description)) + 
   geom_point(size=2.5) + 
   geom_line(aes(group = description), size = 1) +
   labs(title = "US Annual Inflation Rate by CPI Divisons (2011-2021)",
@@ -199,9 +200,8 @@ ggplot(us_infl_divis, aes(x = year, y = annual_inflation, color = description, s
     color = "CPI Division",
     shape = "CPI Division") +
   theme_minimal() +
-  scale_color_brewer(palette = "Dark2") +
   theme(legend.position = "bottom",
-legend.direction = "vertical" )
+        legend.direction = "vertical" )
 ```
 
-Answer: Most divisions are relatively stable over time, but transport shows the greatest fluctuations, which is unsurprising given the US's politics in oil, and major global oil stock crashes and spikes. Housing and health show a steady increase (again unsurprising), and furnishing is relatively flat. I didn't think that food would fluctuate more than housing, but I guess this is attributed to supply issues, since the US imports a lot of stuff (I believe).
+Answer: Most divisions are relatively stable over time, but transport shows the greatest fluctuations, which is unsurprising given the US's politics in oil, and major global oil stock crashes and spikes, especially in the context of COVID. I'm surprised by how stable health is given that the US doesn't have universal healthcare. I didn't think that food would fluctuate more than housing, but I guess this is attributed to supply issues, since the US imports a lot of stuff (I believe).
